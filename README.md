@@ -15,7 +15,9 @@ Using the pyjira.py library makes it possible to use standard configuration opti
 
 ## Configuration file
 If you do not want to always specify credentials on every call, you can use a configuration file *~/.jiracli*.
-Put the file .jiracli into your home directory. It may contain the following values:
+Put the file .jiracli into your home directory. 
+Further more you can configure custom fields here. See more information in the sample file.
+The file may contain the following values:
 ```
 [server]
 address=<address of jira installation>
