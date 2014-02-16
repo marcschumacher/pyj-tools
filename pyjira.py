@@ -42,6 +42,7 @@ class JiraServerConfiguration:
 		self.address = None
 		self.username = None
 		self.password = None
+		self.custom_field_configuration = None
 		self.debug = False
 		self.jira_version = '5'
 
@@ -63,7 +64,20 @@ class JiraServerConfiguration:
 			except:
 				pass
 		self.log = self.init_logging(self.debug)
+		self.parse_custom_fields(config)
 
+	def parse_custom_fields(self, config):
+		self.custom_field_configuration = {}
+		for item in config.items('customField'):
+			section_key = item[0]
+			value = item[1]
+			split_section_key = section_key.split('.')
+			section = split_section_key[0]
+			key = split_section_key[1]
+
+			if (not self.custom_field_configuration.has_key(section)):
+				self.custom_field_configuration[section] = {}
+			self.custom_field_configuration[section][key] = value
 
 	# If no parser is specified, only the configuration file is used for authentification
 	def parse_configuration(self, parser=None):
@@ -124,6 +138,24 @@ class JiraServerConfiguration:
 
 	def get_issue_url(self, issue_key):
 		return "%s/browse/%s" % (self.address, issue_key)
+
+	def add_configured_custom_value(self, valueHash, key, value):
+		if self.custom_field_configuration.has_key(key):
+			config = self.custom_field_configuration[key]
+			type = config['type']
+			if type == 'additionalHash':
+				fieldname = config['fieldname']
+				fieldsubname = config['fieldsubname']
+				self.add_hash_value(fieldname, fieldsubname, valueHash, value)
+			else:
+				self.log.error('Unknown type %s!' % type)
+		else:
+			self.log.error('Unable to find custom field definition for %s!' % key)
+
+	def add_hash_value(self, valueName, name, valueHash, value):
+		if value:
+			valueHash[valueName] = {}
+			valueHash[valueName][name] = value
 
 
 class JiraConnection:

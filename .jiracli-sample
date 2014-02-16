@@ -1,0 +1,26 @@
+[server]
+address=https://jira.myserver.net
+username=myusername
+password=mypassword
+
+[customField]
+developer.fieldName = customfield_10344
+developer.fieldSubname = name
+developer.type = additionalHash
+
+reviewer.fieldName = customfield_12089
+reviewer.fieldSubname = name
+reviewer.type = additionalHash
+
+security-risk.fieldName = customfield_15362
+security-risk.fieldSubname = value
+security-risk.type = additionalHash
+security-risk.values = Unchecked|Low Risk|Medium Risk|High Risk
+
+tester.fieldName = customfield_10959
+tester.fieldSubname = name
+tester.type = additionalHash
+
+[misc]
+debug=true
+
